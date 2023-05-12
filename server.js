@@ -7,6 +7,9 @@ require("dotenv").config();
 // Connect to MongoDB
 require("./db");
 
+// Connect to MongoDB to update
+// require("./db_update");
+
 const PORT = process.env.PORT;
 
 // Init Express app
@@ -19,6 +22,12 @@ app.use(cors({ origin: "*" }));
 
 // Middleware for Router module
 app.use(require('./router/register'));
+app.use(require('./router/login'));
+app.use(require('./router/sendticket'));
+app.use(require('./router/signout'));
+app.use(require('./router/getdata'));
+app.use(require('./router/attendance'));
+
 
 // Start the server
 app.listen(PORT, () => {

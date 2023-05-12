@@ -11,9 +11,9 @@
       .container {
         width: 1000px;
         height: 323px;
-        margin: 9% auto;
-        background-image: url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80");
-        background-size: cover;
+        margin: 1% auto;
+        background-image: url({{BG_URL}});
+        background-size: contain;
         border-radius: 4px;
         box-shadow: 0 8px 16px rgba(35, 51, 64, 0.25);
       }
@@ -30,29 +30,37 @@
       .qr-holder > img {
         margin-top: 20px;
       }
-      .teamName,
-      .ticket-id {
+      .teamName {
         font-size: 14px;
         line-height: 22px;
         color: #230065;
         margin-top: 15px;
+        word-wrap: break-word;
       }
-    </style>
+      .ticket-id {
+        font-size: 12px;
+        line-height: 22px;
+        color: #230065;
+        margin-top: 15px;
+      }
+      </style>
   </head>
   <body>
+    
     <div class="container">
-        <div class="qr-holder">
-          <img src="{{QR_CODE_IMAGE_PATH}}" width="120px" height="120px" />
-          <div class="ticket-id">
-            TICKET ID:<br/>
-            <span style="font-size: 12px;"> {{TICKET_ID}} </span>
-          </div>
-          <div class="teamName">
-            TEAM NAME:<br/>
-            {{TEAM_NAME}}
-          </div>
+      <div class="qr-holder">
+        <img src="{{QR_CODE_IMAGE_PATH}}" width="120px" height="120px" />
+        <div class="ticket-id">
+          TICKET ID:<br/>
+          <span style="font-size: 12px;"> {{TICKET_ID}} </span>
         </div>
+        <div class="teamName">
+          TEAM NAME:<br/>
+          {{TEAM_NAME}}
+        </div>
+      </div>
     </div>
+    <div style="text-align:center"><h6><span>&copy;<span> RM - All Rights Reserved</h6><div>
 
   </body>
 </html>

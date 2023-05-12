@@ -2,15 +2,23 @@ const puppeteer = require("puppeteer");
 const qrcode = require("qrcode");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 
-const ticketTemplate = path.resolve(__dirname, "utils", "template.html");
-const qrCodePath = path.resolve(__dirname, "utils", "qr-code.png");
-const pdfPathPrefix = path.resolve(__dirname, "utils", "ticket_");
+const KEY=process.env.CIPHER_KEY;
+const IV=process.env.CIPHER_IV;
+const ALGO=process.env.CIPHER_ALGORITHM;
+const SALT=process.env.JWT_SECRET;
+
+const ticketTemplate = path.resolve(__dirname, "..", "assets", "template.html");
+const qrCodePath = path.resolve(__dirname, "..", "temp", "team-qr-code.png");
+const pdfPathPrefix = path.resolve(__dirname, "..", "temp", "ticket_");
 
 const generatePDFTicket = async (ticketData) => {
   try {
     const pdfPath = pdfPathPrefix + ticketData.TICKET_ID + ".pdf";
-    const qrData = ticketData.TEAM_NAME;
+    const cipher = crypto.createCipheriv(ALGO, KEY, IV);
+    const saltedData =  SALT + "$" + ticketData.TICKET_ID;
+    const qrData = cipher.update(saltedData, "utf-8", "hex") + cipher.final("hex");
 
     await generateQRCode(qrCodePath, qrData);
 
@@ -19,6 +27,8 @@ const generatePDFTicket = async (ticketData) => {
     ticketData.QR_CODE_IMAGE_PATH = `data:image/jpeg;base64,${qrImgData}`;
 
     // Insert data in the template
+    const ticketBgImgData = fs.readFileSync(ticketData.BG_URL).toString("base64");
+    ticketData.BG_URL = `data:image/jpeg;base64,${ticketBgImgData}`;
     const templateHTML = fs.readFileSync(ticketTemplate).toString();
     const ticketHTML = formatHTML(templateHTML, ticketData);
 
@@ -28,8 +38,8 @@ const generatePDFTicket = async (ticketData) => {
     await page.setContent(ticketHTML);
     await page.pdf({
       path: pdfPath,
-      width: "1200px",
-      height: "523px",
+      width: "1050px",
+      height: "400px",
       printBackground: true,
     });
     await browser.close();
@@ -37,7 +47,7 @@ const generatePDFTicket = async (ticketData) => {
     // delete qr file
     fs.unlinkSync(qrCodePath);
 
-    console.log(`[+] Ticket generated at: ${pdfPath}`);
+    // console.log(`[+] Ticket generated at: ${pdfPath}`);
 
     return true;
   } catch (e) {

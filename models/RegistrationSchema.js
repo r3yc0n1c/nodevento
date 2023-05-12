@@ -5,6 +5,7 @@ const registrationSchema = new mongoose.Schema({
     teamName: { type: String, required: true, unique: true },
     phone: { type: Number, required: true, unique: true },
     slot: { type: String, enum: ["Slot 1", "Slot 2"] },
+    room: String,
     emailSent: { type: Boolean, default: false },
     attendance: { type: Boolean, default: false },
   },
@@ -26,7 +27,6 @@ const registrationSchema = new mongoose.Schema({
       default: "pending",
     },
     totalAmount: Number,
-    // transactionID: String
   },
 });
 

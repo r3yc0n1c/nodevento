@@ -1,5 +1,14 @@
 # Event Backend
-NodeJS backend for official SCCSBS events
+NodeJS event management API for hosting online/in-person events
+
+## Features
+- [x] Online registration
+- [x] Admin routes
+- [x] Mailing System
+- [x] Ticketing System
+- [x] User authentication
+- [x] QR Attendance System
+- [ ] Razorpay payment integration
 
 ## Built with
 - NodeJs
@@ -8,6 +17,7 @@ NodeJS backend for official SCCSBS events
 - Nodemailer
 - Puppeteer
 - Qrcode
+- Crypto
 
 ## Installation
 - Create the `.env` file based on `.env.example`
