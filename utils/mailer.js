@@ -127,4 +127,66 @@ const sendEventMail = async (ticketData) => {
   }
 };
 
-module.exports = { sendWelcomeMail, sendEventMail };
+// TODO:
+const sendCertMail = async (certData) => {
+  try{
+    // generated PDF file
+    const pdfPath = path.resolve(__dirname, "..", "temp", `${certData.name}_${certData.event}${certData.year}_certificate.pdf`);
+
+    let info = await transporter.sendMail({
+      from: ORG_EMAIL,
+      to: ticketData.TEAM_EMAIL,
+      subject: `Your ticket for ${eventName}!!`,
+      html: `<h3>Hi ${ticketData.TEAM_NAME}👋,</h3><br/><br/>
+      <h2>Toh kaisi chal rahi hai 🧠 ki kasrat 🏋??</h2> <br/> 
+      
+      We could 👂 your excitement loud so here is the event ticket 🎫 specially for you. 🥳 <br/> <br/>
+       
+      📢📢 Team leaders please communicate the following points to your team members:<br>
+      <ul>
+      <li>✅ Check your alloted slot and room number. </li>
+      <li>⏰ Come atleast <b>30 mins</b> before the event for qr verification.</li>
+      <li>🆔 All the team members should be present with their <b>College ID cards</b> for member identification.</li> 
+      <li>🧾 Team leaders must carry the <b>Payment receipt</b> and the event ticket attached in this mail.</li>
+      <li>⏳ Timings:
+            <b><ul>
+            <li>Round 1 - Slot 1 (11 am to 12 pm)</li>
+            <li>Round 1 - Slot 2 (12.45 pm to 1.45 pm)</li>
+            <li>Final Round (3.30 pm to 4.30 pm)</li>
+            </ul></b>
+      </ul>
+
+      <br/> So, buckle your seat belts 🚀 and get ready for <b>${eventName} 🔍 2023</b>. <br/><br/>
+      
+      
+      If you have any questions or concerns, please do not hesitate to contact us at ${ORG_EMAIL} or </br>
+      +91 8436351337 / +91 9832609948 / +91 7059445497.<br/><br/>
+      
+      All the Best!<br/><br/>
+      
+      Regards,<br/>
+      Team SC_CSBS<br/>
+      Academy of Technology<br/>`,
+
+      attachments: [
+        {
+          filename: `${eventName}_ticket.pdf`,
+          path: pdfPath,
+        },
+      ],
+    });
+
+    // console.log("info", info);
+
+    // del local ticket file after sending mail
+    fs.unlinkSync(pdfPath);
+
+    return true;
+  }
+  catch(e){
+    console.log(e);
+    return false;
+  }
+};
+
+module.exports = { sendWelcomeMail, sendEventMail, sendCertMail };
